@@ -1,4 +1,5 @@
 ##自学spring boot 案例
+
 ###1,日志配置 
     在配置文件中 application.yaml 增加配置
         ## 日志配置, 只能配置在主 配置文件中
@@ -34,6 +35,7 @@
           @Log : 支持各种logger对象，使用时用对应的注解，如：@Log4j
           
 ###3, spring boot 异步 框架
+
 ####1,spring boot 的异步调用
     spring boot 中使用异步调用,@Async为异步注解，放到方法上，表示调用该方法的线程与此方法异步执行
      @Async 注解需要配合@EnableAsync注解使用
