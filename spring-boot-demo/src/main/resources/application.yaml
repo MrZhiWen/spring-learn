@@ -2,6 +2,12 @@
 server:
   port: 9090
 
+spring:
+  swagger:
+    enabled: true
+
+
 ## 日志配置, 只能配置在主 配置文件中
 logging:
   config: classpath:logback.xml
+

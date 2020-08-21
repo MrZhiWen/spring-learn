@@ -2,7 +2,7 @@
 
 ### 1,日志配置 
     在配置文件中 application.yaml 增加配置
-        ## 日志配置, 只能配置在主 配置文件中
+        ##日志配置, 只能配置在主 配置文件中
         logging:
             config: classpath:logback.xml
     引用logback.xml配置 日志配置
@@ -51,5 +51,75 @@
         1,AsyncConfiguration.java 中创建 自定义线程
         2,使用 @Async 需要指定线程 bean 名称
           
-### 4, spring boot 异步 框架          
-          
+### 4, spring boot Swagger2 的使用 自动生成接口文档
+文档访问地址:http:IP:post/swagger-ui.html
+#### 1, pom.xml导入依赖jar包
+    <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger2</artifactId>
+        <version>2.9.2</version>
+    </dependency>
+    <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger-ui</artifactId>
+        <version>2.9.2</version>
+    </dependency>
+    
+#### 2, 配置Swagger2 到IOC容器中 `案例:SwaggerConfig.java`
+application.yaml 配置  spring.swagger.enabled=true 是用于区别于生产和测试环境是否开启api文档
+    
+    /**
+     * @ClassName : SwaggerConfig.java
+     * @Description : Swagger2 api 文档生成工具配置
+     * @Author : lizhiwen
+     * @Date: 2020-08-21 08:27
+     */
+    @Configuration
+    @EnableSwagger2
+    public class SwaggerConfig {
+        @Value(value = "spring.swagger.enabled")
+        private Boolean swaggerEnabled;
+    
+        /**
+         * 创建 Docket
+         * 用于配置swagger2，包含文档基本信息
+         * 指定swagger2的作用域（这里指定包路径下的所有API）
+         * @return
+         */
+        @Bean
+        public Docket createResApi() {
+            return new Docket(DocumentationType.SWAGGER_2)
+                    .apiInfo(apiInfo())
+                    .enable(swaggerEnabled)
+                    .select()
+                    .apis(RequestHandlerSelectors.basePackage("com.demo.boot"))
+                    .paths(PathSelectors.any())
+                    .build();
+        }
+    
+        public ApiInfo apiInfo() {
+            return new ApiInfoBuilder()
+                    .title("接口文档")
+                    .description("spring-boot-demo")
+    //                //团队地址
+    //                .termsOfServiceUrl("")
+                    // 设置联系方式
+                    .contact(new Contact("lizhiwen", "", "719272090@qq.com"))
+                    .version("1.0")
+                    .build();
+        }
+    }
+#### 3, Swagger2 注解配置 解释
+|               | Swagger2 常用注解             |  | |
+| ------------ | ------------- | -----------    | -----------       |
+| 注解          |  用途          | 注解位置        |  参数方法          |                                                                                                                       
+| ------------ | ------------- | -----------    |  -----------      |  
+| @Api         | 表示标识这个类是swagger的资源                |  用于类   | @Api(value = "用户相关接口",tags = {"用户操作接口"})  |
+| @ApiOperation| 表示一个http请求的操作                      |  用于方法  | @ApiOperation(value="根据用户ID获取用户信息",notes="提示内容") |
+| @ApiParam()  | 表示对参数的添加元数据（说明或是否必填等）,不方便使用建议使用@ApiImplicitParams      |  用于方法  | @ApiParam(name = "userId",value = "用户ID",required = true) Long id ,@ApiParam(name = "userName",value = "用户姓名" |
+| @ApiImplicitParams() | 表示对参数的添加元数据（说明或是否必填等） |  用于方法    | @ApiImplicitParams({ 填写 @ApiImplicitParam 注解}) |
+| @ApiImplicitParam()  | 表示对参数的添加元数据（说明或是否必填等） |  用于方法    | @ApiImplicitParam(name = "userId", value = "用户ID", dataType = "Long", required = true) |
+| @ApiModel()  | 表示对类进行说明，用于参数用实体类接收         |  用于类    | @ApiModel(value = "ResultVO 对象",description = "请求返回结果") |
+| @ApiModelProperty() | 表示对model属性的说明或者数据操作更改  |  用于方法   | @ApiModelProperty(value = "请求返回状态码",name = "code",example = "0000") |
+
+
