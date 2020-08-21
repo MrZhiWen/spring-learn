@@ -1,0 +1,7 @@
+## 设置服务端口 9090
+server:
+  port: 9090
+
+## 日志配置, 只能配置在主 配置文件中
+logging:
+  config: classpath:logback.xml
