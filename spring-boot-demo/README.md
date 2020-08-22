@@ -112,8 +112,7 @@ application.yaml 配置  spring.swagger.enabled=true 是用于区别于生产和
 #### 3, Swagger2 注解配置 解释
 |               | Swagger2 常用注解             |  | |
 | ------------ | ------------- | -----------    | -----------       |
-| 注解          |  用途          | 注解位置        |  参数方法          |                                                                                                                       
-| ------------ | ------------- | -----------    |  -----------      |  
+| 注解          |  用途          | 注解位置        |  参数方法          |                                                                                                                         
 | @Api         | 表示标识这个类是swagger的资源                |  用于类   | @Api(value = "用户相关接口",tags = {"用户操作接口"})  |
 | @ApiOperation| 表示一个http请求的操作                      |  用于方法  | @ApiOperation(value="根据用户ID获取用户信息",notes="提示内容") |
 | @ApiParam()  | 表示对参数的添加元数据（说明或是否必填等）,不方便使用建议使用@ApiImplicitParams      |  用于方法  | @ApiParam(name = "userId",value = "用户ID",required = true) Long id ,@ApiParam(name = "userName",value = "用户姓名" |
